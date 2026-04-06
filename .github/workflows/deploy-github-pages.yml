@@ -31,9 +31,11 @@ jobs:
           node-version: 22
           cache: npm
 
+      # Asset URLs must match the path in the browser after the hostname, e.g. /Wallet_APP/
+      # If your live URL path ≠ GitHub repo name (casing or custom domain), set repo variable PAGES_BASE_PATH (e.g. /Wallet_APP/)
       - name: Install and build
         env:
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_BASE_PATH: ${{ vars.PAGES_BASE_PATH || format('/{0}/', github.event.repository.name) }}
         run: |
           npm ci
           npm run build
