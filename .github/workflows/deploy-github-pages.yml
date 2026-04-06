@@ -1,5 +1,9 @@
-# Build Vite app and deploy to GitHub Pages (static hosting).
-# Repo Settings → Pages → Source: GitHub Actions.
+# Build Vite app and deploy to GitHub Pages.
+#
+# FIRST-TIME SETUP (required or deploy returns 404):
+#   Repo → Settings → Pages → Build and deployment → Source: GitHub Actions
+#   (Not "Deploy from a branch".) Save, then re-run this workflow.
+#
 name: Deploy to GitHub Pages
 
 on:
@@ -14,13 +18,15 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
 
       - uses: actions/setup-node@v4
         with:
@@ -29,7 +35,6 @@ jobs:
 
       - name: Install and build
         env:
-          # Must match repository name for project site: https://<user>.github.io/<repo>/
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
         run: |
           npm ci
